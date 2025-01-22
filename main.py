@@ -5,7 +5,7 @@ HEIGHT = 600
 
 def main():
     var = Window(WIDTH, HEIGHT)
-    var.tk_canvas.mainloop()
+    var.Wait_for_Close()
 
 if __name__ == '__main__':
     main()
