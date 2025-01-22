@@ -1,3 +1,4 @@
+from WindowLogic.Cell import Cell
 from WindowLogic.Line import Line
 from WindowLogic.Point import Point
 from WindowLogic.Window import Window
@@ -6,20 +7,25 @@ WIDTH = 800
 HEIGHT = 800
 
 def main():
-    var = Window(WIDTH, HEIGHT)
-    point1 = Point(0, 10)
-    point2 = Point(200, 350)
-    point3 = Point(200, 550)
+    window = Window(WIDTH, HEIGHT)
 
-    line1 = Line(point1, point2)
-    line2 = Line(point3, point2)
-    line3 = Line(point3, point1)
+    cell1 = Cell(window, Point(50, 50), Point(150, 150))
+    cell1.has_right_wall = False
+    cell2 = Cell(window, Point(200, 50), Point(300, 150))
+    cell2.has_left_wall = False
 
-    var.draw_line(line1, "red")
-    var.draw_line(line2, "blue")
-    var.draw_line(line3, "green")
+    # Draw the cells
+    cell1.draw()
+    cell2.draw()
 
-    var.Wait_for_Close()
+    # Draw a move path from cell1 to cell2
+    cell1.draw_move(cell2, undo=False)  # Red line for forward move
+
+    # Simulate an undo move (gray line)
+    # cell2.draw_move(cell1, undo=True)
+
+
+    window.Wait_for_Close()
 
 if __name__ == '__main__':
     main()

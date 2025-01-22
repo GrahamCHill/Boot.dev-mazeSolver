@@ -21,6 +21,9 @@ class Window:
     def Window(self, width, height):
         self.__init__(width, height)
 
+    def get_canvas(self):
+        """Provide access to the canvas."""
+        return self.__tk_canvas
 
     def Redraw(self):
         self.__window.update_idletasks()
