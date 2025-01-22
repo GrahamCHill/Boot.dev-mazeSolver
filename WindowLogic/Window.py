@@ -1,5 +1,5 @@
 from tkinter import *
-
+from WindowLogic.Line import *
 
 class Window:
     def __init__(self, width, height):
@@ -20,9 +20,11 @@ class Window:
     def Window(self, width, height):
         self.__init__(width, height)
 
+
     def Redraw(self):
         self.__window.update_idletasks()
         self.__window.update()
+
 
     def Wait_for_Close(self):
         self.__tk_running = True
@@ -39,7 +41,6 @@ class Window:
         self.__window.destroy()
 
 
-
-
-
-
+    def draw_line(self, line, fill_color):
+        """Draw a Line instance on the canvas."""
+        line.draw(self.__tk_canvas, fill_color)
