@@ -9,7 +9,8 @@ class Window:
         self.__window.title("Python Maze Generator and Solver")
         self.__window.geometry(f"{width}x{height}")
 
-        self.__tk_canvas = Canvas(self.__window)
+
+        self.__tk_canvas = Canvas(self.__window, width=width, height=height, background="white")
         self.__tk_canvas.pack()
 
         self.__tk_running = False

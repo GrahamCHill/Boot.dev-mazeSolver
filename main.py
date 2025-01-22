@@ -7,12 +7,12 @@ HEIGHT = 800
 
 def main():
     var = Window(WIDTH, HEIGHT)
-    point1 = Point(0, 0)
-    point2 = Point(50, 350)
+    point1 = Point(0, 10)
+    point2 = Point(200, 350)
     point3 = Point(200, 550)
 
     line1 = Line(point1, point2)
-    line2 = Line(point1, point3)
+    line2 = Line(point3, point2)
     line3 = Line(point3, point1)
 
     var.draw_line(line1, "red")
