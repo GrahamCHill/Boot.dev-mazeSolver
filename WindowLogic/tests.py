@@ -1,26 +1,46 @@
 import unittest
 from WindowLogic.Maze import Maze
+from WindowLogic.Cell import Cell
 from WindowLogic.Window import Window
+from WindowLogic.Point import Point
+import time
 
-class Tests(unittest.TestCase):
-    def test_maze_create_cells(self):
-        num_cols = 12
-        num_rows = 10
-        cell_size_x = 10
-        cell_size_y = 10
+class MazeTests(unittest.TestCase):
+    def setUp(self):
+        """Set up a dummy window and maze instance for testing."""
+        self.num_cols = 5
+        self.num_rows = 4
+        self.cell_size_x = 20
+        self.cell_size_y = 20
+        self.win = Window(800, 800)
+        self.maze = Maze(0, 0, self.num_rows, self.num_cols, self.cell_size_x, self.cell_size_y, self.win)
 
-        # Create a dummy window object to pass into Maze
-        win = Window(300, 300)
+    def test_maze_dimensions(self):
+        self.assertEqual(len(self.maze._cells), self.num_rows, "Number of rows does not match")
+        for row in self.maze._cells:
+            self.assertEqual(len(row), self.num_cols, "Number of columns in row does not match")
 
-        # Create the Maze instance
-        m1 = Maze(0, 0, num_rows, num_cols, cell_size_x, cell_size_y, win)
+    def test_cell_wall_defaults(self):
+        for row in self.maze._cells:
+            for cell in row:
+                self.assertTrue(cell.has_left_wall, "Expected left wall to be True")
+                self.assertTrue(cell.has_right_wall, "Expected right wall to be True")
+                self.assertTrue(cell.has_top_wall, "Expected top wall to be True")
+                self.assertTrue(cell.has_bottom_wall, "Expected bottom wall to be True")
 
-        # Check that there are `num_rows` rows
-        self.assertEqual(len(m1._cells), num_rows, "Number of rows does not match")
+    def test_draw_cells(self):
+        try:
+            for row in self.maze._cells:
+                for cell in row:
+                    cell.draw()
+        except Exception as e:
+            self.fail(f"Cell drawing raised an exception: {e}")
 
-        # Check that each row contains `num_cols` cells
-        for row in m1._cells:
-            self.assertEqual(len(row), num_cols, "Number of columns in row does not match")
+    def test_maze_animation(self):
+        try:
+            self.maze.animate()
+        except Exception as e:
+            self.fail(f"Maze animation raised an exception: {e}")
 
 if __name__ == "__main__":
     unittest.main()
