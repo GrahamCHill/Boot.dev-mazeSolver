@@ -1,7 +1,7 @@
 from WindowLogic.Maze import Maze
 from WindowLogic.Window import Window
 
-WIDTH = 800
+WIDTH = 50 + 100 * 5 + 50
 HEIGHT = 800
 
 def main():

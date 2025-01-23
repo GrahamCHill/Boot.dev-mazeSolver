@@ -1,9 +1,7 @@
 import unittest
 from WindowLogic.Maze import Maze
-from WindowLogic.Cell import Cell
 from WindowLogic.Window import Window
-from WindowLogic.Point import Point
-import time
+
 
 class MazeTests(unittest.TestCase):
     def setUp(self):
@@ -12,7 +10,7 @@ class MazeTests(unittest.TestCase):
         self.num_rows = 4
         self.cell_size_x = 20
         self.cell_size_y = 20
-        self.win = Window(800, 800)
+        self.win = Window(200, 200)
         self.maze = Maze(0, 0, self.num_rows, self.num_cols, self.cell_size_x, self.cell_size_y, self.win)
 
     def test_maze_dimensions(self):
@@ -41,6 +39,10 @@ class MazeTests(unittest.TestCase):
             self.maze.animate()
         except Exception as e:
             self.fail(f"Maze animation raised an exception: {e}")
+
+
+class EntryExitTests(unittest.TestCase):
+    pass
 
 if __name__ == "__main__":
     unittest.main()

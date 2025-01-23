@@ -1,7 +1,22 @@
 import time
+from random import random, randint
 
 from WindowLogic.Cell import Cell
 from WindowLogic.Point import Point
+
+
+def _break_entrance_and_exit(cell, row, column, row_max, col_max):
+    if row == 0 and column == 0:
+        if randint(1,2) % 2 == 0:
+            cell.has_top_wall = False
+        else:
+            cell.has_left_wall = False
+    if row == (row_max -1) and column == (col_max - 1) :
+        if randint(1,2) % 2 == 0:
+            cell.has_bottom_wall = False
+        else:
+            cell.has_right_wall = False
+    pass
 
 
 class Maze:
@@ -36,6 +51,7 @@ class Maze:
 
                 cell = Cell(self._win, point1, point2)
                 column.append(cell)
+                _break_entrance_and_exit(cell, x, y, self.num_rows, self.num_cols)
                 self._draw_cell(cell)
             self._cells.append(column)
 
