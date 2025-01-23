@@ -1,5 +1,5 @@
 import time
-from random import random, randint
+import random
 
 from WindowLogic.Cell import Cell
 from WindowLogic.Point import Point
@@ -9,7 +9,7 @@ class Maze:
     def __init__(self, x1, y1,
                  num_rows, num_cols,
                  cell_size_x, cell_size_y,
-                 win):
+                 win, r_seed = None):
         self._cells = []
         self.x1 = x1
         self.y1 = y1
@@ -19,6 +19,14 @@ class Maze:
         self.cell_size_y = cell_size_y
         self._win = win
 
+        # Generating a random seed value or Default to None if there is none
+        if r_seed is not None:
+            random.seed(r_seed)
+            self._seed = random.randint(1,2)
+        else:
+            self._seed = 0
+
+        # Track Entry and exit positions
         self.entry = None
         self.exit = None
 
@@ -56,17 +64,33 @@ class Maze:
         time.sleep(0.05)
 
     def _break_entrance_and_exit(self, cell, row, column, row_max, col_max):
+        print (self._seed)
         if row == 0 and column == 0:
-            if randint(1, 2) % 2 == 0:
+            if self._seed % 2 == 0:
                 cell.has_top_wall = False
-                self.entry = "top"
+                self.entry = [cell, "top"]
             else:
                 cell.has_left_wall = False
-                self.entry = "left"
+                self.entry = [cell, "left"]
         if row == (row_max - 1) and column == (col_max - 1):
-            if randint(1, 2) % 2 == 0:
+            if self._seed % 2 == 0:
                 cell.has_bottom_wall = False
-                self.exit = "bottom"
+                self.exit = [cell, "bottom"]
             else:
                 cell.has_right_wall = False
-                self.entry = "right"
+                self.exit = [cell, "right"]
+
+
+    def break_walls(self):
+        for cell in self._cells:
+            # Prevent the top from losing their border
+            if cell._x1 == 0 and self.entry[0]:
+                cell.has_top_wall = True
+            if cell._y1 == 0 and self.entry[0]:
+                cell.has_left_wall = True
+            # columns [[col1][col2][col3]...[coln]]
+            # right wall
+            if cell._x2 == self._cells[0] and cell != self.exit[0]:
+                cell.has_left_wall = True
+            # bottom wall
+        pass

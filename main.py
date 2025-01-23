@@ -8,9 +8,11 @@ def main():
     window = Window(WIDTH, HEIGHT)
 
     # Create a maze with 5 rows and 5 columns, starting at (50, 50)
-    maze = Maze(50, 50, 5, 5, 100, 100, window)
+    maze = Maze(50, 50, 5, 5, 100, 100, window, 2)
 
-
+    print(maze.entry)
+    print(maze.exit)
+    print( maze._cells)
     window.Wait_for_Close()
 
 if __name__ == '__main__':

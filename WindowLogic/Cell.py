@@ -12,7 +12,7 @@ class Cell:
         self._x2 = point2.x # bottom wall x
         self._y2 = point2.y # right wall y
 
-        self.drawn = False
+        self.visited = False
 
         self._canvas = window.get_canvas()  # Access the canvas from the Window instance
 
