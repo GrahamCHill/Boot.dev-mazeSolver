@@ -19,6 +19,9 @@ class Maze:
         self.cell_size_y = cell_size_y
         self._win = win
 
+        self.entry = None
+        self.exit = None
+
         self._create_cells()
 
 
@@ -56,10 +59,14 @@ class Maze:
         if row == 0 and column == 0:
             if randint(1, 2) % 2 == 0:
                 cell.has_top_wall = False
+                self.entry = "top"
             else:
                 cell.has_left_wall = False
+                self.entry = "left"
         if row == (row_max - 1) and column == (col_max - 1):
             if randint(1, 2) % 2 == 0:
                 cell.has_bottom_wall = False
+                self.exit = "bottom"
             else:
                 cell.has_right_wall = False
+                self.entry = "right"
