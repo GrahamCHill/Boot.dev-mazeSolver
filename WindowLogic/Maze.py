@@ -67,16 +67,24 @@ class Maze:
         print (self._seed)
         if row == 0 and column == 0:
             if self._seed % 2 == 0:
+                cell.has_bottom_wall = False
+                cell.has_right_wall_wall = False
                 cell.has_top_wall = False
                 self.entry = [cell, "top"]
             else:
+                cell.has_right_wall = False
+                cell.has_bottom_wall = False
                 cell.has_left_wall = False
                 self.entry = [cell, "left"]
         if row == (row_max - 1) and column == (col_max - 1):
             if self._seed % 2 == 0:
+                cell.has_top_wall = False
+                cell.has_left_wall = False
                 cell.has_bottom_wall = False
                 self.exit = [cell, "bottom"]
             else:
+                cell.has_left_wall = False
+                cell.has_top_wall = False
                 cell.has_right_wall = False
                 self.exit = [cell, "right"]
 
@@ -90,7 +98,9 @@ class Maze:
                 cell.has_left_wall = True
             # columns [[col1][col2][col3]...[coln]]
             # right wall
-            if cell._x2 == self._cells[0] and cell != self.exit[0]:
-                cell.has_left_wall = True
+            if cell._x2 == self._cells and cell != self.exit[0]:
+                cell.has_right_wall = True
             # bottom wall
+            if cell._y2 == self._cells[0] and cell != self.exit[0]:
+                cell.has_bottom_wall_wall = True
         pass
