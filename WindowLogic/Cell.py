@@ -12,18 +12,38 @@ class Cell:
         self._x2 = point2.x # bottom wall x
         self._y2 = point2.y # right wall y
 
+        self.drawn = False
+
         self._canvas = window.get_canvas()  # Access the canvas from the Window instance
 
     def draw(self):
         """Draw the cell based on its walls."""
+        bg_color = "#d9d9d9"  # Background color (use as needed)
+
+        # Draw left wall
         if self.has_left_wall:
             self._canvas.create_line(self._x1, self._y1, self._x1, self._y2, fill="black", width=2)
+        else:
+            self._canvas.create_line(self._x1, self._y1, self._x1, self._y2, fill=bg_color, width=2)
+
+        # Draw right wall
         if self.has_right_wall:
             self._canvas.create_line(self._x2, self._y1, self._x2, self._y2, fill="black", width=2)
+        else:
+            self._canvas.create_line(self._x2, self._y1, self._x2, self._y2, fill=bg_color, width=2)
+
+        # Draw top wall
         if self.has_top_wall:
             self._canvas.create_line(self._x1, self._y1, self._x2, self._y1, fill="black", width=2)
+        else:
+            self._canvas.create_line(self._x1, self._y1, self._x2, self._y1, fill=bg_color, width=2)
+
+        # Draw bottom wall
         if self.has_bottom_wall:
             self._canvas.create_line(self._x1, self._y2, self._x2, self._y2, fill="black", width=2)
+        else:
+            self._canvas.create_line(self._x1, self._y2, self._x2, self._y2, fill=bg_color, width=2)
+
 
 
     def draw_move(self, move_to_cell, undo=False):

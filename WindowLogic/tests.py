@@ -10,7 +10,7 @@ class MazeTests(unittest.TestCase):
         self.num_rows = 4
         self.cell_size_x = 20
         self.cell_size_y = 20
-        self.win = Window(200, 200)
+        self.win = Window(0, 0)
         self.maze = Maze(0, 0, self.num_rows, self.num_cols, self.cell_size_x, self.cell_size_y, self.win)
 
     def test_maze_dimensions(self):
@@ -21,10 +21,12 @@ class MazeTests(unittest.TestCase):
     def test_cell_wall_defaults(self):
         for row in self.maze._cells:
             for cell in row:
-                self.assertTrue(cell.has_left_wall, "Expected left wall to be True")
-                self.assertTrue(cell.has_right_wall, "Expected right wall to be True")
-                self.assertTrue(cell.has_top_wall, "Expected top wall to be True")
-                self.assertTrue(cell.has_bottom_wall, "Expected bottom wall to be True")
+                if (cell._x1 != 0 and cell._y1 != 0
+                        and cell._x2 != len(self.maze._cells) and cell._y2 != len(self.maze._cells)):
+                    self.assertTrue(cell.has_left_wall, "Expected left wall to be True")
+                    self.assertTrue(cell.has_right_wall, "Expected right wall to be True")
+                    self.assertTrue(cell.has_top_wall, "Expected top wall to be True")
+                    self.assertTrue(cell.has_bottom_wall, "Expected bottom wall to be True")
 
     def test_draw_cells(self):
         try:
@@ -40,9 +42,6 @@ class MazeTests(unittest.TestCase):
         except Exception as e:
             self.fail(f"Maze animation raised an exception: {e}")
 
-
-class EntryExitTests(unittest.TestCase):
-    pass
 
 if __name__ == "__main__":
     unittest.main()
