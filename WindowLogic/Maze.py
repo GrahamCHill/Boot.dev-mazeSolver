@@ -2,6 +2,7 @@ import time
 import random
 
 from WindowLogic.Cell import Cell
+from WindowLogic.Line import Line
 from WindowLogic.Point import Point
 
 class Maze:
@@ -24,6 +25,9 @@ class Maze:
         self.exit = None
 
         self._create_cells()
+
+        # To prevent multiple solvings at the same time
+        self._is_solving = False
 
 
     def _create_cells(self):
@@ -104,7 +108,7 @@ class Maze:
     def animate(self):
         """Redraw the canvas with a slight delay for visualization."""
         self._win.Redraw()
-        time.sleep(0.05)
+        time.sleep(0.00125)
 
 
     def _reset_cells_visited(self):
@@ -112,3 +116,66 @@ class Maze:
         for row in self._cells:
             for cell in row:
                 cell.visited = False
+
+    def solve(self):
+        """Solve the maze."""
+        print("Solving...")
+        self._reset_cells_visited()  # Reset all cells' visited status
+        if self._solve_r(0, 0):
+            print("Solved!")
+        else:
+            print("No solution found.")
+
+    def _solve_r(self, i, j):
+        """Recursive maze-solving logic with proper animation."""
+        # Check if the current cell is out of bounds
+        if i < 0 or i >= self.num_rows or j < 0 or j >= self.num_cols:
+            return False
+
+        cell = self._cells[i][j]
+
+        # Check if the cell is already visited
+        if cell.visited:
+            return False
+
+        # Mark the cell as visited
+        cell.visited = True
+
+        # Base case: if the cell is the exit, maze is solved
+        if cell == self.exit:
+            return True
+
+        # Directions: Down, Right, Up, Left
+        directions = [
+            (1, 0, "has_bottom_wall", "has_top_wall"),  # Down
+            (0, 1, "has_right_wall", "has_left_wall"),  # Right
+            (-1, 0, "has_top_wall", "has_bottom_wall"),  # Up
+            (0, -1, "has_left_wall", "has_right_wall"),  # Left
+        ]
+
+        for di, dj, current_wall, next_wall in directions:
+            ni, nj = i + di, j + dj
+
+            if 0 <= ni < self.num_rows and 0 <= nj < self.num_cols:
+                next_cell = self._cells[ni][nj]
+
+                # Check if there's a wall between the current cell and the next cell
+                if not getattr(cell, current_wall) and not getattr(next_cell, next_wall):
+                    # Draw a red line to the next cell
+                    cell.draw_move(next_cell)
+                    self.animate()  # Ensure animation for visualization
+
+                    # Recursive call
+                    if self._solve_r(ni, nj):
+                        return True
+
+                    # Undo move with a gray line if the path is invalid (backtrack)
+                    cell.draw_move(next_cell, undo=True)
+                    self.animate()  # Animate the undo operation
+
+        # Backtrack if no valid path is found
+        return False
+
+
+
+

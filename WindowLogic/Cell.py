@@ -19,7 +19,7 @@ class Cell:
 
     def draw(self):
         """Draw the cell based on its walls."""
-        bg_color = "#d9d9d9"  # Background color (use as needed)
+        bg_color = "#FAFAFA"  # Background color (use as needed)
 
         # Draw left wall
         if self.has_left_wall:

@@ -66,8 +66,12 @@ class Window:
         self.__tk_canvas.create_text(
             10, 10, anchor=NW, text="Press R to redraw the maze", fill="black", font=("Arial", 12)
         )
+        self.__tk_canvas.create_text(
+            10, 25, anchor=NW, text="Press E to Solve the maze", fill="black", font=("Arial", 12)
+        )
 
 
     def draw_line(self, line, fill_color):
         """Draw a Line instance on the canvas."""
         line.draw(self.__tk_canvas, fill_color)
+

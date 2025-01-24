@@ -6,34 +6,35 @@ WIDTH = 50 + 100 * 5 + 50
 HEIGHT = 800
 
 def main():
-    window = Window(WIDTH, HEIGHT)
-
-    # Initialize maze dimensions and parameters
-    num_rows, num_cols = 5, 5
-    cell_width, cell_height = 100, 100
-
-    # Create a function to initialize and draw the maze with a new seed
-    def create_and_draw_maze(seed=None):
-        if seed is None:
-            seed = random.randint(0, 1000000)  # Generate a new seed
-        random.seed(seed)  # Set the seed for randomization
-        print(f"Using random seed: {seed}")  # Debug info (can be removed)
-        maze = Maze(50, 50, num_rows, num_cols, cell_width, cell_height, window, seed)
-        maze.break_walls()
-        maze.animate()
-
-    # Initial maze generation
-    create_and_draw_maze()
-
-    # Function to regenerate the maze
     def regenerate_maze(event):
-        window.clear_canvas()  # Clear the canvas
-        create_and_draw_maze()  # Generate and draw a new maze
+        """Regenerate the maze."""
+        global maze
+        window.clear_canvas()
+        maze = Maze(50, 100, 10, 10, 20, 20, window)
+        maze.break_walls()
 
-    # Bind the R key to the regeneration function
-    window.bind_key("<r>", regenerate_maze)
+    def solve_maze(event):
+        """Solve the maze."""
+        maze.solve()
 
+    def regenerate_and_solve_maze(event):
+        """Regenerate the maze and solve it."""
+        regenerate_maze(event)
+        maze.solve()
+
+    # Initialize the window and maze
+    window = Window(800, 800)
+    # maze = Maze(50, 50, 10, 10, 40, 40, window)
+    # maze.break_walls()
+    regenerate_maze(window) # Initial Generation
+    # Bind keys
+    window.bind_key("<r>", regenerate_maze)  # Regenerate maze
+    window.bind_key("<e>", solve_maze)  # Solve maze
+    window.bind_key("<Shift-R>", regenerate_and_solve_maze)  # Regenerate and solve maze
+
+    # Run the application
     window.Wait_for_Close()
+
 
 if __name__ == '__main__':
     main()
