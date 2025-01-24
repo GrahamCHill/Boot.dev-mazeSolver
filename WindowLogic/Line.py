@@ -5,6 +5,7 @@ class Line:
         self.point1 = point1  # First endpoint (Point instance)
         self.point2 = point2  # Second endpoint (Point instance)
 
+
     def draw(self, canvas, fill_color):
         """Draw the line on the canvas."""
         canvas.create_line(

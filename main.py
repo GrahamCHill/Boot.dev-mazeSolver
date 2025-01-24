@@ -15,7 +15,7 @@ def main():
     # Create a function to initialize and draw the maze with a new seed
     def create_and_draw_maze(seed=None):
         if seed is None:
-            seed = random.randint(0, 10000)  # Generate a new seed
+            seed = random.randint(0, 1000000)  # Generate a new seed
         random.seed(seed)  # Set the seed for randomization
         print(f"Using random seed: {seed}")  # Debug info (can be removed)
         maze = Maze(50, 50, num_rows, num_cols, cell_width, cell_height, window, seed)

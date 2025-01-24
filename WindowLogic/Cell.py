@@ -16,6 +16,7 @@ class Cell:
 
         self._canvas = window.get_canvas()  # Access the canvas from the Window instance
 
+
     def draw(self):
         """Draw the cell based on its walls."""
         bg_color = "#d9d9d9"  # Background color (use as needed)
@@ -43,7 +44,6 @@ class Cell:
             self._canvas.create_line(self._x1, self._y2, self._x2, self._y2, fill="black", width=2)
         else:
             self._canvas.create_line(self._x1, self._y2, self._x2, self._y2, fill=bg_color, width=2)
-
 
 
     def draw_move(self, move_to_cell, undo=False):

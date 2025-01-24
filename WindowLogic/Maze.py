@@ -4,7 +4,6 @@ import random
 from WindowLogic.Cell import Cell
 from WindowLogic.Point import Point
 
-
 class Maze:
     def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win, r_seed=None):
         self._cells = []
@@ -26,6 +25,7 @@ class Maze:
 
         self._create_cells()
 
+
     def _create_cells(self):
         """Create all the cells and set the entry and exit points."""
         for y in range(self.num_rows):
@@ -44,10 +44,12 @@ class Maze:
         self.entry.has_top_wall = False
         self.exit.has_bottom_wall = False
 
+
     def break_walls(self):
         """Start the maze generation process."""
         self._generate_maze(0, 0)  # Start from the entry cell
         self._ensure_outer_walls()
+
 
     def _generate_maze(self, i, j):
         """Generate the maze using Depth-First Search (DFS) and backtracking."""
@@ -75,6 +77,7 @@ class Maze:
                 # Recursively visit the neighbor
                 self._generate_maze(ni, nj)
 
+
     def _ensure_outer_walls(self):
         """Ensure all outer walls remain intact except at the entry and exit points."""
         for i in range(self.num_rows):
@@ -97,7 +100,15 @@ class Maze:
                 # Redraw cell to reflect changes
                 cell.draw()
 
+
     def animate(self):
         """Redraw the canvas with a slight delay for visualization."""
         self._win.Redraw()
         time.sleep(0.05)
+
+
+    def _reset_cells_visited(self):
+        """Reset the `visited` property of all cells in the maze to False."""
+        for row in self._cells:
+            for cell in row:
+                cell.visited = False

@@ -21,21 +21,26 @@ class Window:
             10, 10, anchor=NW, text="Press R to redraw the maze", fill="black", font=("Arial", 12)
         )
 
+
     def Window(self, width, height):
         self.__init__(width, height)
+
 
     def get_canvas(self):
         """Provide access to the canvas."""
         return self.__tk_canvas
+
 
     def Redraw(self):
         """Update the Tkinter window."""
         self.__window.update_idletasks()
         self.__window.update()
 
+
     def bind_key(self, key, callback):
         """Bind a key press to a callback function."""
         self.__window.bind(key, callback)
+
 
     def Wait_for_Close(self):
         """Run the Tkinter main loop."""
@@ -47,10 +52,12 @@ class Window:
             # Catch errors if the window is already destroyed
             self.__tk_running = False
 
+
     def Close(self):
         """Handle window close event."""
         self.__tk_running = False
         self.__window.destroy()
+
 
     def clear_canvas(self):
         """Clear all content from the canvas."""
@@ -59,6 +66,7 @@ class Window:
         self.__tk_canvas.create_text(
             10, 10, anchor=NW, text="Press R to redraw the maze", fill="black", font=("Arial", 12)
         )
+
 
     def draw_line(self, line, fill_color):
         """Draw a Line instance on the canvas."""
