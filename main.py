@@ -10,7 +10,7 @@ def main():
         """Regenerate the maze."""
         global maze
         window.clear_canvas()
-        maze = Maze(50, 100, 10, 10, 20, 20, window)
+        maze = Maze(50, 100, 30, 30, 20, 20, window)
         maze.break_walls()
 
     def solve_maze(event):
