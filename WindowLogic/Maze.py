@@ -6,10 +6,7 @@ from WindowLogic.Point import Point
 
 
 class Maze:
-    def __init__(self, x1, y1,
-                 num_rows, num_cols,
-                 cell_size_x, cell_size_y,
-                 win, r_seed = None):
+    def __init__(self, x1, y1, num_rows, num_cols, cell_size_x, cell_size_y, win, r_seed=None):
         self._cells = []
         self.x1 = x1
         self.y1 = y1
@@ -19,88 +16,88 @@ class Maze:
         self.cell_size_y = cell_size_y
         self._win = win
 
-        # Generating a random seed value or Default to None if there is none
+        # Random seed for reproducibility
         if r_seed is not None:
             random.seed(r_seed)
-            self._seed = random.randint(1,2)
-        else:
-            self._seed = 0
 
-        # Track Entry and exit positions
+        # Entry and exit points
         self.entry = None
         self.exit = None
 
         self._create_cells()
 
-
     def _create_cells(self):
+        """Create all the cells and set the entry and exit points."""
         for y in range(self.num_rows):
-            column = []
+            row = []
             for x in range(self.num_cols):
-                point1 = Point(
-                    self.x1 + y * self.cell_size_x,
-                    self.y1 + x * self.cell_size_y,
-                )
-                point2 = Point(
-                    point1.x + self.cell_size_x,
-                    point1.y + self.cell_size_y,
-                )
+                point1 = Point(self.x1 + x * self.cell_size_x, self.y1 + y * self.cell_size_y)
+                point2 = Point(point1.x + self.cell_size_x, point1.y + self.cell_size_y)
+                row.append(Cell(self._win, point1, point2))
+            self._cells.append(row)
 
-                cell = Cell(self._win, point1, point2)
-                column.append(cell)
-                self._break_entrance_and_exit(cell, x, y, self.num_rows, self.num_cols)
-                self._draw_cell(cell)
-            self._cells.append(column)
+        # Set entry and exit points (top-left and bottom-right corners)
+        self.entry = self._cells[0][0]  # Top-left corner
+        self.exit = self._cells[self.num_rows - 1][self.num_cols - 1]  # Bottom-right corner
 
-
-    def _draw_cell(self, cell):
-        cell.draw()
-        self.animate()
-        pass
-
-
-    def animate(self):
-        self._win.Redraw()
-        time.sleep(0.05)
-
-    def _break_entrance_and_exit(self, cell, row, column, row_max, col_max):
-        print (self._seed)
-        if row == 0 and column == 0:
-            if self._seed % 2 == 0:
-                cell.has_bottom_wall = False
-                cell.has_right_wall_wall = False
-                cell.has_top_wall = False
-                self.entry = [cell, "top"]
-            else:
-                cell.has_right_wall = False
-                cell.has_bottom_wall = False
-                cell.has_left_wall = False
-                self.entry = [cell, "left"]
-        if row == (row_max - 1) and column == (col_max - 1):
-            if self._seed % 2 == 0:
-                cell.has_top_wall = False
-                cell.has_left_wall = False
-                cell.has_bottom_wall = False
-                self.exit = [cell, "bottom"]
-            else:
-                cell.has_left_wall = False
-                cell.has_top_wall = False
-                cell.has_right_wall = False
-                self.exit = [cell, "right"]
-
+        # Remove walls at the entry and exit points
+        self.entry.has_top_wall = False
+        self.exit.has_bottom_wall = False
 
     def break_walls(self):
-        for cell in self._cells:
-            # Prevent the top from losing their border
-            if cell._x1 == 0 and self.entry[0]:
-                cell.has_top_wall = True
-            if cell._y1 == 0 and self.entry[0]:
-                cell.has_left_wall = True
-            # columns [[col1][col2][col3]...[coln]]
-            # right wall
-            if cell._x2 == self._cells and cell != self.exit[0]:
-                cell.has_right_wall = True
-            # bottom wall
-            if cell._y2 == self._cells[0] and cell != self.exit[0]:
-                cell.has_bottom_wall_wall = True
-        pass
+        """Start the maze generation process."""
+        self._generate_maze(0, 0)  # Start from the entry cell
+        self._ensure_outer_walls()
+
+    def _generate_maze(self, i, j):
+        """Generate the maze using Depth-First Search (DFS) and backtracking."""
+        self._cells[i][j].visited = True
+        directions = [
+            (-1, 0, "top", "bottom"),  # Up
+            (1, 0, "bottom", "top"),  # Down
+            (0, -1, "left", "right"),  # Left
+            (0, 1, "right", "left"),  # Right
+        ]
+        random.shuffle(directions)
+
+        for di, dj, current_wall, neighbor_wall in directions:
+            ni, nj = i + di, j + dj
+            if 0 <= ni < self.num_rows and 0 <= nj < self.num_cols and not self._cells[ni][nj].visited:
+                # Remove walls between current cell and neighbor
+                setattr(self._cells[i][j], f"has_{current_wall}_wall", False)
+                setattr(self._cells[ni][nj], f"has_{neighbor_wall}_wall", False)
+
+                # Redraw cells
+                self._cells[i][j].draw()
+                self._cells[ni][nj].draw()
+                self.animate()
+
+                # Recursively visit the neighbor
+                self._generate_maze(ni, nj)
+
+    def _ensure_outer_walls(self):
+        """Ensure all outer walls remain intact except at the entry and exit points."""
+        for i in range(self.num_rows):
+            for j in range(self.num_cols):
+                cell = self._cells[i][j]
+
+                # Top row
+                if i == 0 and cell != self.entry:
+                    cell.has_top_wall = True
+                # Bottom row
+                if i == self.num_rows - 1 and cell != self.exit:
+                    cell.has_bottom_wall = True
+                # Left column
+                if j == 0 and cell != self.entry:
+                    cell.has_left_wall = True
+                # Right column
+                if j == self.num_cols - 1 and cell != self.exit:
+                    cell.has_right_wall = True
+
+                # Redraw cell to reflect changes
+                cell.draw()
+
+    def animate(self):
+        """Redraw the canvas with a slight delay for visualization."""
+        self._win.Redraw()
+        time.sleep(0.05)
